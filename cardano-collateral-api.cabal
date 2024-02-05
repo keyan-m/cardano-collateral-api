@@ -1,4 +1,4 @@
-cabal-version:      3.0
+cabal-version:      3.6
 -- The cabal-version field refers to the version of the .cabal specification,
 -- and can be different from the cabal-install (the tool) version and the
 -- Cabal (the library) version you are using. As such, the Cabal (the library)
@@ -58,6 +58,17 @@ extra-doc-files:    CHANGELOG.md
 common warnings
     ghc-options: -Wall
 
+library
+    hs-source-dirs:   src
+    exposed-modules:  CCApi.Utils
+    other-modules:    Paths_cardano_collateral_api
+    autogen-modules:  Paths_cardano_collateral_api
+    build-depends:    base ^>=4.18.1.0
+                    , base16
+                    , bytestring
+                    , cardano-api ^>= 8.37.1.0
+                    , cardano-ledger-core >= 1.8
+
 executable cardano-collateral-api
     -- Import common warning flags.
     import:           warnings
@@ -74,8 +85,7 @@ executable cardano-collateral-api
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.18.1.0
                     , bytestring
-                    , cardano-api ^>= 8.37.1.0
-                    , cardano-ledger-core >= 1.8
+                    , cardano-collateral-api
 
     -- Directories containing source files.
     hs-source-dirs:   app
