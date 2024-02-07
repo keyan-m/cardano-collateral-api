@@ -1,10 +1,9 @@
 module Main where
 
 
-import qualified Data.ByteString as BS
 import           Data.Word (Word8)
 import           System.Environment (getArgs)
-import           CCApi.Utils (hexToByteString)
+import           CCApi.Utils (hexToByteString, readByteStringTx)
 
 
 main :: IO ()
@@ -15,7 +14,7 @@ main = do
     hexStr : _ ->
       case hexToByteString hexStr of
         Right bs -> do
-          printInColor green $ show $ BS.unpack bs
+          printInColor green $ show $ readByteStringTx bs
         Left err -> do
           printInColor red err
 

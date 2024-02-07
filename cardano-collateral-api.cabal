@@ -63,10 +63,13 @@ library
     exposed-modules:  CCApi.Utils
     other-modules:    Paths_cardano_collateral_api
     autogen-modules:  Paths_cardano_collateral_api
-    build-depends:    base ^>=4.18.1.0
+    build-depends:    aeson
+                    , base ^>=4.18.1.0
                     , base16
                     , bytestring
                     , cardano-api ^>= 8.37.1.0
+                    , cardano-binary
+                    , cardano-cli ^>= 8.19.0.0
                     , cardano-ledger-core >= 1.8
 
 executable cardano-collateral-api
