@@ -14,7 +14,13 @@ main = do
     hexStr : _ ->
       case hexToByteString hexStr of
         Right bs -> do
-          printInColor green $ show $ readByteStringTx bs
+          case readByteStringTx bs of
+            Just tx -> do
+              printInColor green "\n============= DECODED TX ======================================================"
+              print tx
+              printInColor green "==============================================================================="
+            Nothing ->
+              printInColor red "Invalid transaction."
         Left err -> do
           printInColor red err
 
@@ -38,4 +44,8 @@ green   = mkRGBColor 25  176 92
 purple  :: String
 purple  = mkRGBColor 155 39  255
 noColor :: String
+
+lightGreen :: String
+lightGreen = mkRGBColor 125 200 125
+
 noColor = "\ESC[0m"

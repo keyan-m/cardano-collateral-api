@@ -68,7 +68,6 @@ library
                     , base16
                     , bytestring
                     , cardano-api ^>= 8.37.1.0
-                    , cardano-binary
                     , cardano-cli ^>= 8.19.0.0
                     , cardano-ledger-core >= 1.8
 
