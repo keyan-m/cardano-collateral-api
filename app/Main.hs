@@ -1,9 +1,10 @@
 module Main where
 
 
-import           Data.Word (Word8)
-import           System.Environment (getArgs)
 import           CCApi.Utils (hexToByteString, readByteStringTx)
+import           Data.Word (Word8)
+import           Text.Pretty.Simple (pPrintOpt, CheckColorTty (..), OutputOptions (..), defaultOutputOptionsDarkBg)
+import           System.Environment (getArgs)
 
 
 main :: IO ()
@@ -17,7 +18,7 @@ main = do
           case readByteStringTx bs of
             Just tx -> do
               printInColor green "\n============= DECODED TX ======================================================"
-              print tx
+              pPrintOpt CheckColorTty (defaultOutputOptionsDarkBg {outputOptionsIndentAmount = 1}) tx
               printInColor green "==============================================================================="
             Nothing ->
               printInColor red "Invalid transaction."
