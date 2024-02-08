@@ -1,7 +1,10 @@
 module Main where
 
 
-import           CCApi.Utils (hexToByteString, readByteStringTx)
+import           Cardano.Api
+  ( InAnyShelleyBasedEra (..)
+  )
+import           CCApi.Utils (hexToByteString, readByteStringTx, getTxBodyAndWitnesses)
 import           Data.Word (Word8)
 import           Text.Pretty.Simple (pPrintOpt, CheckColorTty (..), OutputOptions (..), defaultOutputOptionsDarkBg)
 import           System.Environment (getArgs)
@@ -16,9 +19,10 @@ main = do
       case hexToByteString hexStr of
         Right bs -> do
           case readByteStringTx bs of
-            Just tx -> do
+            Just (InAnyShelleyBasedEra _ tx) -> do
+              let txBodyAndWitnesses = getTxBodyAndWitnesses tx
               printInColor green "\n============= DECODED TX ======================================================"
-              pPrintOpt CheckColorTty (defaultOutputOptionsDarkBg {outputOptionsIndentAmount = 1}) tx
+              pPrintOpt CheckColorTty (defaultOutputOptionsDarkBg {outputOptionsIndentAmount = 1}) txBodyAndWitnesses
               printInColor green "==============================================================================="
             Nothing ->
               printInColor red "Invalid transaction."

@@ -4,24 +4,30 @@
 module CCApi.Utils
   ( hexToByteString
   , readByteStringTx
+  , getTxBodyAndWitnesses
   ) where
 
 
-import qualified Cardano.Api
+import qualified Cardano.Api as Api
 import           Cardano.Api
   ( FromSomeType (..)
   , SerialiseAsCBOR
   , Tx
+  , TxBody
+  , KeyWitness
   , InAnyShelleyBasedEra (..)
   , AsType (..)
   , ShelleyBasedEra (..)
   , deserialiseFromCBOR
+  , getTxBody
+  , getTxWitnesses
   )
 import           Data.Base16.Types (assertBase16)
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Base16 as B16
 import           Data.String (fromString)
+import           Data.Typeable (Typeable)
 
 
 hexToByteString :: String -> Either String ByteString
@@ -69,3 +75,6 @@ readByteStringTx =
     , FromSomeType (AsTx AsBabbageEra) (InAnyShelleyBasedEra ShelleyBasedEraBabbage)
     , FromSomeType (AsTx AsConwayEra)  (InAnyShelleyBasedEra ShelleyBasedEraConway)
     ]
+
+getTxBodyAndWitnesses :: Tx era -> (TxBody era, [KeyWitness era])
+getTxBodyAndWitnesses tx = (getTxBody tx, getTxWitnesses tx)
