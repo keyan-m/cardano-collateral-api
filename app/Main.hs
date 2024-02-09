@@ -4,7 +4,13 @@ module Main where
 import           Cardano.Api
   ( InAnyShelleyBasedEra (..)
   )
-import           CCApi.Utils (hexToByteString, readByteStringTx, getTxBodyAndWitnesses)
+import           CCApi.Utils
+  ( hexToByteString
+  , readByteStringTx
+  , getTxBodyAndWitnesses
+  , getTxIns
+  , getTxInsCollateral
+  )
 import           Data.Word (Word8)
 import           Text.Pretty.Simple (pPrintOpt, CheckColorTty (..), OutputOptions (..), defaultOutputOptionsDarkBg)
 import           System.Environment (getArgs)
@@ -20,15 +26,23 @@ main = do
         Right bs -> do
           case readByteStringTx bs of
             Just (InAnyShelleyBasedEra _ tx) -> do
-              let txBodyAndWitnesses = getTxBodyAndWitnesses tx
-              printInColor green "\n============= DECODED TX ======================================================"
-              pPrintOpt CheckColorTty (defaultOutputOptionsDarkBg {outputOptionsIndentAmount = 1}) txBodyAndWitnesses
-              printInColor green "==============================================================================="
+              let (body, _) = getTxBodyAndWitnesses tx
+                  txIns = getTxIns body
+                  cols = getTxInsCollateral body
+              putStrLn ""
+              printInColor green "==========================================================================================="
+              pPrint txIns
+              printInColor green "==========================================================================================="
+              pPrint cols
+              printInColor green "==========================================================================================="
             Nothing ->
               printInColor red "Invalid transaction."
         Left err -> do
           printInColor red err
 
+
+pPrint :: Show a => a -> IO ()
+pPrint = pPrintOpt CheckColorTty (defaultOutputOptionsDarkBg {outputOptionsIndentAmount = 1})
 
 printInColor :: String -> String -> IO ()
 printInColor color msg = do

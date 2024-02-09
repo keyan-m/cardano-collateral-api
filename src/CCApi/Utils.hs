@@ -5,6 +5,8 @@ module CCApi.Utils
   ( hexToByteString
   , readByteStringTx
   , getTxBodyAndWitnesses
+  , getTxIns
+  , getTxInsCollateral
   ) where
 
 
@@ -78,3 +80,13 @@ readByteStringTx =
 
 getTxBodyAndWitnesses :: Tx era -> (TxBody era, [KeyWitness era])
 getTxBodyAndWitnesses tx = (getTxBody tx, getTxWitnesses tx)
+
+
+getTxIns :: TxBody era -> [Api.TxIn]
+getTxIns = fmap fst . Api.txIns . Api.getTxBodyContent
+
+getTxInsCollateral :: TxBody era -> [Api.TxIn]
+getTxInsCollateral body =
+  case Api.txInsCollateral (Api.getTxBodyContent body) of
+    Api.TxInsCollateral _ ins -> ins
+    _                         -> []

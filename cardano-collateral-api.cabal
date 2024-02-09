@@ -69,7 +69,9 @@ library
                     , bytestring
                     , cardano-api ^>= 8.38.0.1
                     , cardano-cli ^>= 8.20.0.0
+                    , cardano-crypto-class ^>= 2.1.4.0
                     , cardano-ledger-core >= 1.8
+                    , containers
 
 executable cardano-collateral-api
     -- Import common warning flags.
