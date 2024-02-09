@@ -7,6 +7,7 @@ module CCApi.Utils
   , getTxBodyAndWitnesses
   , getTxIns
   , getTxInsCollateral
+  , scriptIsClaimedValid
   ) where
 
 
@@ -90,3 +91,9 @@ getTxInsCollateral body =
   case Api.txInsCollateral (Api.getTxBodyContent body) of
     Api.TxInsCollateral _ ins -> ins
     _                         -> []
+
+scriptIsClaimedValid :: TxBody era -> Bool
+scriptIsClaimedValid body =
+  case Api.txScriptValidity (Api.getTxBodyContent body) of
+    Api.TxScriptValidity _ Api.ScriptValid -> True
+    _                                    -> False

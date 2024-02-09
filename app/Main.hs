@@ -10,6 +10,7 @@ import           CCApi.Utils
   , getTxBodyAndWitnesses
   , getTxIns
   , getTxInsCollateral
+  , scriptIsClaimedValid
   )
 import           Data.Word (Word8)
 import           Text.Pretty.Simple (pPrintOpt, CheckColorTty (..), OutputOptions (..), defaultOutputOptionsDarkBg)
@@ -25,16 +26,21 @@ main = do
       case hexToByteString hexStr of
         Right bs -> do
           case readByteStringTx bs of
-            Just (InAnyShelleyBasedEra _ tx) -> do
-              let (body, _) = getTxBodyAndWitnesses tx
-                  txIns = getTxIns body
-                  cols = getTxInsCollateral body
-              putStrLn ""
-              printInColor green "==========================================================================================="
-              pPrint txIns
-              printInColor green "==========================================================================================="
-              pPrint cols
-              printInColor green "==========================================================================================="
+            Just (InAnyShelleyBasedEra _ tx) ->
+              let
+                (body, _) = getTxBodyAndWitnesses tx
+              in
+              if (scriptIsClaimedValid body)
+              then do
+                let txIns = getTxIns body
+                    cols = getTxInsCollateral body
+                putStrLn ""
+                printInColor green "==========================================================================================="
+                pPrint txIns
+                printInColor green "==========================================================================================="
+                pPrint cols
+                printInColor green "==========================================================================================="
+              else printInColor red "Transaction's script validity is false."
             Nothing ->
               printInColor red "Invalid transaction."
         Left err -> do
