@@ -66,12 +66,14 @@ library
     build-depends:    aeson
                     , base ^>=4.18.1.0
                     , base16
+                    , blockfrost-client
                     , bytestring
                     , cardano-api ^>= 8.38.0.1
                     , cardano-cli ^>= 8.20.0.0
                     , cardano-crypto-class ^>= 2.1.4.0
                     , cardano-ledger-core >= 1.8
                     , containers
+                    , pretty-simple
 
 executable cardano-collateral-api
     -- Import common warning flags.
@@ -88,6 +90,8 @@ executable cardano-collateral-api
 
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.18.1.0
+                    , blockfrost-client
+                    , bytestring
                     , cardano-api ^>= 8.38.0.1
                     , cardano-collateral-api
                     , pretty-simple
