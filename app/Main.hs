@@ -18,6 +18,9 @@ import           Data.Word (Word8)
 import           Text.Pretty.Simple (pPrintOpt, CheckColorTty (..), OutputOptions (..), defaultOutputOptionsDarkBg)
 import           System.Environment (getArgs)
 
+WALLET_ADDRESS = "addr_test1qp83nuj43rvtmme8f3n4sprs93scukz5myrxnnmpmmhmu7jm5afn3re7sse8zseg6pm0nn00dv99j97dh9pc2jtmtx5q2mh54q"
+UTXO_TX_HASH = "8685745144edfd533045caf401dd5b15b9f6ae966077a101d7f60311350ae573"
+UTXO_OUTPUT_INDEX = 0
 
 main :: IO ()
 main = do
