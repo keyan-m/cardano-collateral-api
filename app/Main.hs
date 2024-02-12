@@ -1,3 +1,6 @@
+{-# LANGUAGE OverloadedStrings #-}
+
+
 module Main where
 
 
@@ -18,9 +21,10 @@ import           Data.Word (Word8)
 import           Text.Pretty.Simple (pPrintOpt, CheckColorTty (..), OutputOptions (..), defaultOutputOptionsDarkBg)
 import           System.Environment (getArgs)
 
-WALLET_ADDRESS = "addr_test1qp83nuj43rvtmme8f3n4sprs93scukz5myrxnnmpmmhmu7jm5afn3re7sse8zseg6pm0nn00dv99j97dh9pc2jtmtx5q2mh54q"
-UTXO_TX_HASH = "8685745144edfd533045caf401dd5b15b9f6ae966077a101d7f60311350ae573"
-UTXO_OUTPUT_INDEX = 0
+walletAddress :: BF.Address
+walletAddress = BF.Address "addr_test1qp83nuj43rvtmme8f3n4sprs93scukz5myrxnnmpmmhmu7jm5afn3re7sse8zseg6pm0nn00dv99j97dh9pc2jtmtx5q2mh54q"
+-- utxoTxHash = "8685745144edfd533045caf401dd5b15b9f6ae966077a101d7f60311350ae573"
+-- utxoOutputIndex = 0
 
 main :: IO ()
 main = do
@@ -40,8 +44,9 @@ main = do
                 let txIns = getTxIns body
                     cols = getTxInsCollateral body
                 bf <- BF.projectFromFile ".blockfrost"
+                utxosRes <- BF.runBlockfrost bf $ BF.getAddressUtxos walletAddress
+                printInColor yellow $ show utxosRes
                 let cborStr = BF.CBORString $ LBS.fromStrict bs
-                printInColor yellow $ show cborStr
                 evalRes <- BF.runBlockfrost bf $ BF.txEvaluate cborStr
                 case evalRes of
                   Left err -> do

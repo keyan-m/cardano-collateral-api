@@ -36,7 +36,11 @@ import           Data.Typeable (Typeable)
 hexToByteString :: String -> Either String ByteString
 hexToByteString str =
   let
-    bs = fromString str :: ByteString
+    bs :: ByteString
+    bs =
+      case str of
+        '0' : 'x' : rest -> fromString rest
+        _                -> fromString str
   in
   if B16.isBase16 bs
   then Right $ B16.decodeBase16 $ assertBase16 bs
