@@ -100,4 +100,4 @@ scriptIsClaimedValid :: TxBody era -> Bool
 scriptIsClaimedValid body =
   case Api.txScriptValidity (Api.getTxBodyContent body) of
     Api.TxScriptValidity _ Api.ScriptValid -> True
-    _                                    -> False
+    _                                      -> False

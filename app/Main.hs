@@ -5,6 +5,7 @@ module Main where
 
 
 import qualified Blockfrost.Client as BF
+import qualified Blockfrost.Lens as BFL
 import           Cardano.Api
   ( InAnyShelleyBasedEra (..)
   )
@@ -16,6 +17,7 @@ import           CCApi.Utils
   , getTxInsCollateral
   , scriptIsClaimedValid
   )
+import           Control.Lens ((^.))
 import qualified Data.ByteString.Lazy as LBS
 import           Data.Word (Word8)
 import           Text.Pretty.Simple (pPrintOpt, CheckColorTty (..), OutputOptions (..), defaultOutputOptionsDarkBg)
@@ -23,8 +25,12 @@ import           System.Environment (getArgs)
 
 walletAddress :: BF.Address
 walletAddress = BF.Address "addr_test1qp83nuj43rvtmme8f3n4sprs93scukz5myrxnnmpmmhmu7jm5afn3re7sse8zseg6pm0nn00dv99j97dh9pc2jtmtx5q2mh54q"
--- utxoTxHash = "8685745144edfd533045caf401dd5b15b9f6ae966077a101d7f60311350ae573"
--- utxoOutputIndex = 0
+
+utxoTxHash :: BF.TxHash
+utxoTxHash = BF.TxHash "8685745144edfd533045caf401dd5b15b9f6ae966077a101d7f60311350ae573"
+
+utxoOutputIndex :: Integer
+utxoOutputIndex = 0
 
 main :: IO ()
 main = do
@@ -45,8 +51,25 @@ main = do
                     cols = getTxInsCollateral body
                 bf <- BF.projectFromFile ".blockfrost"
                 utxosRes <- BF.runBlockfrost bf $ BF.getAddressUtxos walletAddress
-                printInColor yellow $ show utxosRes
-                let cborStr = BF.CBORString $ LBS.fromStrict bs
+                let resColUTxO =
+                      case utxosRes of
+                        Right initUTxOs ->
+                          case filter ((== walletAddress) . (^. BFL.address)) initUTxOs of
+                            [u] ->
+                              let
+                                cond =
+                                     u ^. BFL.txHash      == utxoTxHash
+                                  && u ^. BFL.outputIndex == utxoOutputIndex
+                              in
+                              if cond
+                              then Right u
+                              else Left "Did not find the collateral UTxO in wallet"
+                            _   ->
+                              Left "Exactly one UTxO was expected to be present in the wallet"
+                        Left err       ->
+                          Left $ show err
+                    cborStr = BF.CBORString $ LBS.fromStrict bs
+                printInColor yellow $ show resColUTxO
                 evalRes <- BF.runBlockfrost bf $ BF.txEvaluate cborStr
                 case evalRes of
                   Left err -> do
