@@ -44,10 +44,10 @@ write-ghc-environment-files: always
 -- Do NOT add more source-repository-package stanzas here unless they are strictly
 -- temporary! Please read the section in CONTRIBUTING about updating dependencies.
 
-source-repository-package
-  type: git
-  location: https://github.com/keyan-m/blockfrost-haskell
-  tag: 5e51f11097f7624aba2c86c51b3980913cb02a69
-  subdir:
-    blockfrost-api
-    blockfrost-client
+-- source-repository-package
+--   type: git
+--   location: https://github.com/keyan-m/blockfrost-haskell
+--   tag: 5e51f11097f7624aba2c86c51b3980913cb02a69
+--   subdir:
+--     blockfrost-api
+--     blockfrost-client

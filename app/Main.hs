@@ -18,7 +18,8 @@ import           CCApi.Utils
   , scriptIsClaimedValid
   )
 import           Control.Lens ((^.))
-import qualified Data.ByteString.Lazy as LBS
+-- import qualified Data.ByteString.Lazy as LBS
+import           Data.String (fromString)
 import           Data.Word (Word8)
 import           Text.Pretty.Simple (pPrintOpt, CheckColorTty (..), OutputOptions (..), defaultOutputOptionsDarkBg)
 import           System.Environment (getArgs)
@@ -68,7 +69,8 @@ main = do
                               Left "Exactly one UTxO was expected to be present in the wallet"
                         Left err       ->
                           Left $ show err
-                    cborStr = BF.CBORString $ LBS.fromStrict bs
+                    -- cborStr = BF.CBORString $ LBS.fromStrict bs
+                    cborStr = BF.CBORString $ fromString hexStr
                 printInColor yellow $ show resColUTxO
                 evalRes <- BF.runBlockfrost bf $ BF.txEvaluate cborStr
                 case evalRes of
