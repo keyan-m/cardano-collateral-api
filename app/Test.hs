@@ -54,6 +54,6 @@ main =
       evalRes <- BF.txEvaluate $ fromMethod method
       print evalRes
     _                -> do
-      putStrLn "usage: <ACTION> <HEX_DECODE_METHOD>"
-      putStrLn "\t<ACTION>\t\t(submit | eval)"
-      putStrLn "\t<HEX_DECODE_METHOD>\t(base16 | fromString)"
+      putStrLn "cabal run bf-test -- <ACTION> <HEX_DECODE_METHOD>"
+      putStrLn "    <ACTION>             (submit | eval)"
+      putStrLn "    <HEX_DECODE_METHOD>  (base16 | fromString)"
