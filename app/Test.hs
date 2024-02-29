@@ -53,7 +53,7 @@ main =
     "eval"   : method : _ -> do
       evalRes <- BF.txEvaluate $ fromMethod method
       print evalRes
-    _                -> do
+    _                     -> do
       putStrLn "cabal run bf-test -- <ACTION> <HEX_DECODE_METHOD>"
       putStrLn "    <ACTION>             (submit | eval)"
       putStrLn "    <HEX_DECODE_METHOD>  (base16 | fromString)"
